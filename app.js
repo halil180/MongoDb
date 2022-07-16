@@ -53,7 +53,7 @@ app.get('/books/:id',(req,res) => {
 })
 app.post('/books', (req, res) => {
     const book = req.body
-  
+
     db.collection('books')
       .insertOne(book)
       .then(result => {
@@ -76,5 +76,21 @@ app.delete('/books/:id',(req,res) => {
         })
     }else{
         res.status(500).json({error:'Not valid cod id'})
+    }
+})
+app.patch('/books/:id',(req,res) => {
+    const updates = req.body
+
+    if (ObjectId.isValid(req.params.id)) {
+        db.collection('books')
+        .updateOne({_id:ObjectId(req.params.id)},{$set:updates})
+        .then(result => {
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            res.status(500).json({error:'could not update the document'})
+        })
+    }else{
+        res.status(500).json({error:'Not valid cod'})
     }
 })
