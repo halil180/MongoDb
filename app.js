@@ -64,3 +64,17 @@ app.post('/books', (req, res) => {
       })
   })
   
+app.delete('/books/:id',(req,res) => {
+    if (ObjectId.isValid(req.params.id)) {
+        db.collection('books')
+        .deleteOne({_id:ObjectId(req.params.id)})
+        .then(result => {
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            res.status(500).json({error:'could not delete the document'})
+        })
+    }else{
+        res.status(500).json({error:'Not valid cod id'})
+    }
+})
